@@ -35,6 +35,7 @@ Alarms are set to turn on when process parameters exceed certain limits. They ar
  - Emergency stop
 
 ## System Modes and Sequence of Operation
+The different modes are briefed below and occur sequentially as listed. They are set up as steps of the sequence in a GRAPH program block. 
 #### Warmup Mode
 When Start pushbutton is pressed, the sequence begins with this step. Allows the turbine to turn at a speed of 30 RPM and runs the oil pump at a low output level (5 GPM) until the oil temperature reaches 150 degree celsius. Once this is established and maintained for at least 10 seconds, the system transitions into the next mode.
 
@@ -48,9 +49,8 @@ Keep everything running and close the power station interlock. Now power is supp
 Once the Stop button has been pushed, power station interlock is opened, turbine turns at a low speed of 20 RPM, and a high oil flow is maintained to the main-shaft bearings until the oil temperature is below 150 degree celsius. Once this is established and maintained for at least 10 seconds, the system transitions into the idle mode.
 
 #### Idle Mode
-Power station interlock and intake house servo motor are deenergized and the turbine brake is engaged.
+Power station interlock and intake house servo motor are deenergized and the turbine brake is engaged. In addition, when an alarm is triggered, the sequence should be aborted and the system should go into Idle mode.
 
-#### Fault Mode
-When an alarm is triggered, the sequence should be aborted and the system should go into Fault mode.
+
 
 
