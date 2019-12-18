@@ -1,1 +1,219 @@
-//
+#### Oil Low Flow Alarm
+IF "OilFlow" < "OilFlowLow_SP" AND "OilPumpVFD_En_Out" AND NOT "Brake_En_Out" AND NOT "Alarm_OilFlowLow"
+    AND NOT "AlarmReset" THEN
+    
+    "TIME_CONV"(INP1 := "OilFlowLow_DT",
+                OUT => "TV1",
+                Time2 => #OilLowFlow_Time);
+    
+    "IEC_Timer_0_DB_1".TON(IN := TRUE,
+                           PT := #OilLowFlow_Time,
+                           Q => "AlarmTrig_OilFlowLow",
+                           ET => "t11");
+ELSE
+    RESET_TIMER("IEC_Timer_0_DB_1");
+    "AlarmTrig_OilFlowLow" := 0;       // New piece
+END_IF;
+
+IF "AlarmTrig_OilFlowLow" THEN
+    "Alarm_OilFlowLow" := 1;
+    "Notify_OilFlowLow" := 1;
+END_IF;
+
+IF "Alarm_OilFlowLow" AND "AlarmReset" THEN
+    "Alarm_OilFlowLow" := 0;
+    "Notify_OilFlowLow" := 0;
+END_IF;
+
+IF "Notify_OilFlowLow" AND "AlarmSilence" THEN
+    "Notify_OilFlowLow" := 0;
+END_IF;
+
+// Oil High Flow Alarm
+IF "OilFlow" > "OilFlowHigh_SP" AND NOT "Alarm_OilFlowHigh" AND NOT "AlarmReset" THEN
+    
+    "TIME_CONV"(INP1 := "OilFlowHigh_DT",
+                OUT => "TV2",
+                Time2 => #OilHighFlow_Time);
+    
+    "IEC_Timer_0_DB_2".TON(IN:=TRUE,
+                           PT:=#OilHighFlow_Time,
+                           Q=>"AlarmTrig_OilFlowHigh",
+                           ET=>#T2);
+    
+ELSE
+    RESET_TIMER("IEC_Timer_0_DB_2");
+    "AlarmTrig_OilFlowHigh" := 0;       // New piece
+END_IF;
+
+IF "AlarmTrig_OilFlowHigh" THEN
+    "Alarm_OilFlowHigh" := 1;
+    "Notify_OilFlowHigh" := 1;
+END_IF;
+
+IF "Alarm_OilFlowHigh" AND "AlarmReset" THEN
+    "Alarm_OilFlowHigh" := 0;
+    "Notify_OilFlowHigh" := 0;
+END_IF;
+
+IF "Notify_OilFlowHigh" AND "AlarmSilence" THEN
+    "Notify_OilFlowHigh" := 0;
+END_IF;
+
+// Oil High Temperature Alarm
+IF "OilTemp" > "OilTempHigh_SP" AND NOT "Alarm_OilTempHigh" AND NOT "AlarmReset" THEN
+    
+    "TIME_CONV"(INP1 := "OilTempHigh_DT",
+                OUT => "TV3",
+                Time2 => #OilTempHigh_Time);
+    
+    "IEC_Timer_0_DB_3".TON(IN:=TRUE,
+                           PT:=#OilTempHigh_Time,
+                           Q=>"AlarmTrig_OilTempHigh",
+                           ET=>"t33");
+    
+ELSE
+    RESET_TIMER("IEC_Timer_0_DB_3");
+    "AlarmTrig_OilTempHigh" := 0;       // New piece
+END_IF;
+
+IF "AlarmTrig_OilTempHigh" THEN
+    "Alarm_OilTempHigh" := 1;
+    "Notify_OilTempHigh" := 1;
+END_IF;
+
+IF "Alarm_OilTempHigh" AND "AlarmReset" THEN
+    "Alarm_OilTempHigh" := 0;
+    "Notify_OilTempHigh" := 0;
+END_IF;
+
+IF "Notify_OilTempHigh" AND "AlarmSilence" THEN
+    "Notify_OilTempHigh" := 0;
+END_IF;
+
+// Over Current Alarm
+IF "Current" > "OverCur_SPP" AND NOT "Alarm_OverCur" AND NOT "AlarmReset" THEN
+    
+    "TIME_CONV"(INP1 := "OverCur_DTT",
+                OUT => "TV4",
+                Time2 => #OverCur_Time);
+    
+    "IEC_Timer_0_DB_4".TON(IN := TRUE,
+                           PT := #OverCur_Time,
+                           Q => "AlarmTrig_OverCur",
+                           ET => "t44");
+    
+ELSE
+    RESET_TIMER("IEC_Timer_0_DB_4");
+    "AlarmTrig_OverCur" := 0;
+END_IF;
+
+IF "AlarmTrig_OverCur" THEN
+    "Alarm_OverCur" := 1;
+    "Notify_OverCur" := 1;
+END_IF;
+
+IF "Alarm_OverCur" AND "AlarmReset" THEN
+    "Alarm_OverCur" := 0;
+    "Notify_OverCur" := 0;
+END_IF;
+
+IF "Notify_OverCur" AND "AlarmSilence" THEN
+    "Notify_OverCur" := 0;
+END_IF;
+
+// Rotor Overspeed Alarm
+IF "RPM" > "RotorOverSpeed_SP" AND NOT "Alarm_RotorOverSpeed" AND NOT "AlarmReset" THEN
+    
+    "TIME_CONV"(INP1 := "RotorOverSpeed_DT",
+                OUT => "TV5",
+                Time2 => #RotorOS_Time);
+    
+    "IEC_Timer_0_DB_5".TON(IN:=TRUE,
+                           PT:=#RotorOS_Time,
+                           Q=>"AlarmTrig_RotorOverSpeed",
+                           ET=>#T5);
+    
+ELSE
+    RESET_TIMER("IEC_Timer_0_DB_5");
+    "AlarmTrig_RotorOverSpeed" := 0;       // New piece
+END_IF;
+
+IF "AlarmTrig_RotorOverSpeed" THEN
+    "Alarm_RotorOverSpeed" := 1;
+    "Notify_RotorOverSpeed" := 1;
+END_IF;
+
+IF "Alarm_RotorOverSpeed" AND "AlarmReset" THEN
+    "Alarm_RotorOverSpeed" := 0;
+    "Notify_RotorOverSpeed" := 0;
+END_IF;
+
+IF "Notify_RotorOverSpeed" AND "AlarmSilence" THEN
+    "Notify_RotorOverSpeed" := 0;
+END_IF;
+
+// Brake Failure Alarm
+IF "Brake_En_Out" AND "RPM" > 0 AND NOT "Alarm_BrakeFailure" AND NOT "AlarmReset" THEN
+    
+    "TIME_CONV"(INP1 := "BrakeFailure_DT",
+                OUT => "TV6",
+                Time2 => #BrakeFailure_Time);
+    
+    "IEC_Timer_0_DB_6".TON(IN:=TRUE,
+                           PT:=#BrakeFailure_Time,
+                           Q=>"AlarmTrig_BrakeFailure",
+                           ET=>#T6);
+    
+ELSE
+    RESET_TIMER("IEC_Timer_0_DB_6");
+    "AlarmTrig_BrakeFailure" := 0;       // New piece
+END_IF;
+
+IF "AlarmTrig_BrakeFailure" THEN
+    "Alarm_BrakeFailure" := 1;
+    "Notify_BrakeFailure" := 1;
+END_IF;
+
+IF "Alarm_BrakeFailure" AND "AlarmReset" THEN
+    "Alarm_BrakeFailure" := 0;
+    "Notify_BrakeFailure" := 0;
+END_IF;
+
+IF "Notify_BrakeFailure" AND "AlarmSilence" THEN
+    "Notify_BrakeFailure" := 0;
+END_IF;
+
+// Emergency Stop
+IF NOT "EmerStop" AND NOT "Alarm_EmerStop" THEN     // Reverse Polarity
+    "Alarm_EmerStop" := 1;
+    "Notify_EmerStop" := 1;
+END_IF;
+
+IF "Alarm_EmerStop" AND "AlarmReset" THEN
+    "Alarm_EmerStop" := 0;
+    "Notify_EmerStop" := 0;
+END_IF;
+
+IF "Notify_EmerStop" AND "AlarmSilence" THEN
+    "Notify_EmerStop" := 0;
+END_IF;
+
+// Alarm Horn
+IF "FaultMode" AND NOT "AlarmHorn_Ctrl" THEN
+    "AlarmHorn_Ctrl" := 1;
+END_IF;
+
+IF "AlarmHorn_Ctrl" AND ("AlarmReset" OR "AlarmSilence") THEN
+    "AlarmHorn_Ctrl" := 0;
+END_IF;
+
+
+
+
+
+
+
+
+
+
