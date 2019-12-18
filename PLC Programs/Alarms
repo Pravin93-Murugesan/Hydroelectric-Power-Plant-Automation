@@ -1,4 +1,4 @@
-#### Oil Low Flow Alarm
+##### Oil Low Flow Alarm
 IF "OilFlow" < "OilFlowLow_SP" AND "OilPumpVFD_En_Out" AND NOT "Brake_En_Out" AND NOT "Alarm_OilFlowLow"
     AND NOT "AlarmReset" THEN
     
@@ -29,7 +29,7 @@ IF "Notify_OilFlowLow" AND "AlarmSilence" THEN
     "Notify_OilFlowLow" := 0;
 END_IF;
 
-// Oil High Flow Alarm
+##### Oil High Flow Alarm
 IF "OilFlow" > "OilFlowHigh_SP" AND NOT "Alarm_OilFlowHigh" AND NOT "AlarmReset" THEN
     
     "TIME_CONV"(INP1 := "OilFlowHigh_DT",
@@ -60,7 +60,7 @@ IF "Notify_OilFlowHigh" AND "AlarmSilence" THEN
     "Notify_OilFlowHigh" := 0;
 END_IF;
 
-// Oil High Temperature Alarm
+##### Oil High Temperature Alarm
 IF "OilTemp" > "OilTempHigh_SP" AND NOT "Alarm_OilTempHigh" AND NOT "AlarmReset" THEN
     
     "TIME_CONV"(INP1 := "OilTempHigh_DT",
@@ -91,7 +91,7 @@ IF "Notify_OilTempHigh" AND "AlarmSilence" THEN
     "Notify_OilTempHigh" := 0;
 END_IF;
 
-// Over Current Alarm
+##### Over Current Alarm
 IF "Current" > "OverCur_SPP" AND NOT "Alarm_OverCur" AND NOT "AlarmReset" THEN
     
     "TIME_CONV"(INP1 := "OverCur_DTT",
@@ -122,7 +122,7 @@ IF "Notify_OverCur" AND "AlarmSilence" THEN
     "Notify_OverCur" := 0;
 END_IF;
 
-// Rotor Overspeed Alarm
+##### Rotor Overspeed Alarm
 IF "RPM" > "RotorOverSpeed_SP" AND NOT "Alarm_RotorOverSpeed" AND NOT "AlarmReset" THEN
     
     "TIME_CONV"(INP1 := "RotorOverSpeed_DT",
@@ -153,7 +153,7 @@ IF "Notify_RotorOverSpeed" AND "AlarmSilence" THEN
     "Notify_RotorOverSpeed" := 0;
 END_IF;
 
-// Brake Failure Alarm
+##### Brake Failure Alarm
 IF "Brake_En_Out" AND "RPM" > 0 AND NOT "Alarm_BrakeFailure" AND NOT "AlarmReset" THEN
     
     "TIME_CONV"(INP1 := "BrakeFailure_DT",
@@ -184,7 +184,7 @@ IF "Notify_BrakeFailure" AND "AlarmSilence" THEN
     "Notify_BrakeFailure" := 0;
 END_IF;
 
-// Emergency Stop
+##### Emergency Stop
 IF NOT "EmerStop" AND NOT "Alarm_EmerStop" THEN     // Reverse Polarity
     "Alarm_EmerStop" := 1;
     "Notify_EmerStop" := 1;
