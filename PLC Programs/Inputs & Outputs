@@ -1,1 +1,96 @@
-//
+//********
+
+// Defining Input-Output signals of the system.
+
+//**********
+
+//Digital Outputs
+IF "Baffle_HOA" = 0 OR ("Baffle_HOA" = 2 AND NOT "Baffle_Ctrl") THEN
+    "Baffle_En" := 0;
+ELSIF "Baffle_HOA" = 1 OR ("Baffle_HOA" = 2 AND "Baffle_Ctrl") THEN
+    "Baffle_En" := 1;
+END_IF;
+
+IF "Alarm_EmerStop" OR "Alarm_OilFlowLow" OR "OilPumpVFD_HOA" = 0 OR ("OilPumpVFD_HOA" = 2
+    AND NOT "OilPumpVFD_Ctrl") THEN
+    "OilPumpVFD_En_Out" := 0;
+ELSIF ("OilPumpVFD_HOA" = 1 OR ("OilPumpVFD_HOA" = 2 AND "OilPumpVFD_Ctrl")) AND NOT "Alarm_EmerStop"
+    AND NOT "Alarm_OilFlowLow" THEN
+            "OilPumpVFD_En_Out" := 1;
+END_IF;
+
+IF "AlarmHorn_HOA" = 0 OR ("AlarmHorn_HOA" = 2 AND NOT "AlarmHorn_Ctrl") THEN
+    "AlarmHorn_En_Out" := 0;
+ELSIF "AlarmHorn_HOA" = 1 OR ("AlarmHorn_HOA" = 2 AND "AlarmHorn_Ctrl") THEN
+    "AlarmHorn_En_Out" := 1;
+END_IF;
+
+IF "Alarm_EmerStop" OR "StationInterlock_HOA" = 0 OR ("StationInterlock_HOA" = 2
+    AND NOT "StationInterlock_Ctrl") THEN
+    "StationInterlock_En_Out" := 0;
+ELSIF ("StationInterlock_HOA" = 1 OR ("StationInterlock_HOA" = 2 AND "StationInterlock_Ctrl"))
+    AND NOT "Alarm_EmerStop" THEN
+    "StationInterlock_En_Out" := 1;
+END_IF;
+
+IF "Brake_HOA" = 0 OR ("Brake_HOA" = 2 AND NOT "Brake_Ctrl") THEN
+    "Brake_En_Out" := 0;
+ELSIF "Brake_HOA" = 1 OR ("Brake_HOA" = 2 AND "Brake_Ctrl") THEN
+    "Brake_En_Out" := 1;
+END_IF;
+
+//Analog Inputs
+"Scaling"(Inp_MIN := 0,
+          Inp_SIGNAL := "OilFlow_In",
+          Out_MIN := 0,
+          Out_MAX := 30,
+          Inp_MAX := 27648,
+          Scal_OUT => "OilFlow");
+
+"Scaling"(Inp_MIN := 0,
+          Inp_SIGNAL := "OilTemp_In",
+          Out_MIN := 0,
+          Out_MAX := 500,
+          Inp_MAX := 27648,
+          Scal_OUT => "OilTemp");
+
+"Scaling"(Inp_MIN := 0,
+          Inp_SIGNAL := "RPM_In",
+          Out_MIN := 0,
+          Out_MAX := 200,
+          Inp_MAX := 27648,
+          Scal_OUT => "RPM");
+
+"Scaling"(Inp_MIN := 0,
+          Inp_SIGNAL := "Current_In",
+          Out_MIN := 0,
+          Out_MAX := 700,
+          Inp_MAX := 27648,
+          Scal_OUT => "Current");
+
+"Power_KW" := "Current" * 0.8;
+
+//Analog Outputs
+"Scaling"(Inp_MIN := 0,
+          Inp_SIGNAL := "Baffle_Pct",
+          Out_MIN := 0,
+          Out_MAX := 27648,
+          Inp_MAX := 100,
+          Scal_OUT => "Baffle_En_Out");     // Baffle_En is of type "BOOL"
+
+"Scaling"(Inp_MIN := 0,
+          Inp_SIGNAL := "OilPumpVFD_Pct",
+          Out_MIN := 0,
+          Out_MAX := 27648,
+          Inp_MAX := 100,
+          Scal_OUT => "OilPumpVFDsp_Out");
+
+
+//Full Auto Bit
+IF "Baffle_HOA" = 2 AND "OilPumpVFD_HOA" = 2 AND "StationInterlock_HOA" = 2 AND "Brake_HOA" = 2
+    AND "AlarmHorn_HOA" = 2 THEN
+    "FullAutoBit" := 1;
+ELSE
+    "FullAutoBit" := 0;
+END_IF;
+
