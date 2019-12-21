@@ -1,0 +1,52 @@
+//********
+
+// Startup Configuration.
+// Some of the default values are set up as soon as the simulation starts.
+
+//**********
+
+// Push Buttons
+"EmerStop" := 1;
+
+// Local & Off & Remote Status
+"AlarmHorn_HOA" := 0;
+"Baffle_HOA" := 0;
+"OilPumpVFD_HOA" := 0;
+"Brake_HOA" := 0;
+"StationInterlock_HOA" := 0;
+
+// Alarm Setpoints and Delays
+"OilFlowLow_SP" := 0;
+"OilFlowLow_DT" := 5;
+
+"OilFlowHigh_SP" := 200;
+"OilFlowHigh_DT" := 5;
+
+"OilTempHigh_SP" := 999;
+"OilTempHigh_DT" := 5;
+
+"OverCur_SPP" := 999;
+"OverCur_DTT" := 5;
+
+"RotorOverSpeed_SP" := 999;
+"RotorOverSpeed_DT" := 5;
+
+"BrakeFailure_DT" := 10;
+
+// Process Setpoints and Delays
+"OilTempWarmup_SP" := 300;
+"OilTempWarmup_DT" := 5;
+
+"RPMWarmup_SP" := 100; // add to HMI
+
+"OilPumpVFDWarmup_SP" := 60;
+
+"CurrentStable_SP" := 300;
+"StablePower_DT" := 5;
+
+"OilTempCooldown_SP" := 80;
+"OilTempCooldown_DT" := 5;
+
+"RPMCooldown_SP" := 70; // add to HMI
+
+"OilPumpVFDCooldown_SP" := 40;
