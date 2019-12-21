@@ -1,0 +1,22 @@
+HMI Details
+
+Screens:
+System Status (default screen)
+Process Overview
+Process Configuration and Control
+Alarm Management
+
+System Status - Displays system mode, alarm indicator, high-level system controls (start and stop button) and a hourmeter.
+
+Note: System should NOT start until all devices are in AUTO control mode and all alarms eliminated.
+Process Overview: Show a graphical representation of our system with relevant process values
+appearing at their points of collection. You can decide where exactly those may be when not clear.
+
+Process Overview - Shows important system parameters along a diagram, alarm indicator, status of turbine brake and 
+                   power station interlock.
+
+Process Configuration and Control - Give the operator control over all devices to include manual setpoints and delay time for alarms,
+                                    system modes transition, HOA push buttons, PID manual setpoints, alarm indicator, 
+                                    emergency stop and reset pushbuttons.
+
+Alarm Management - Shows alarm history, alarm resetbutton, and indicators which show the presence of actual alarm bits.
