@@ -58,4 +58,8 @@ I have also added blocks of code for the following:
    Power station interlock, Turbine brake)
  - A hourmeter to keep track of power supplied to energy grid when system enters generation mode.
 
+## Program code
+They are listed in a seperate folder called 'PLC Programs'. Code in a different language (Functional Block, GRAPH or Ladder Logic) can be found in the pdf file called 'Complete Information'.
 
+## HMI details
+Can be found in a seperate folder called 'HMI/SCADA'.
