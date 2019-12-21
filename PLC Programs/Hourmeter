@@ -1,0 +1,73 @@
+//********
+
+// When system enters Generation Mode, the hourmeter starts to keep track of power supplied to energy grid.
+
+//**********
+
+IF "GenerationMode" THEN
+    "IEC_Timer_0_DB_10".TONR(IN := TRUE,
+                             R := #TimerReset,
+                             PT := T#60s,
+                             Q => #MinuteTrig,
+                             ET => "Seconds_ET");
+END_IF;
+
+// Timer Reset ?
+
+
+"IEC_Counter_0_DB_1".CTU(CU:=#MinuteTrig,
+                         R:=#Counter_Min_Reset,
+                         PV:=60,
+                         Q=>#HourTrig,
+                         CV=>"Minutes_ET");
+
+"IEC_Counter_0_DB_2".CTU(CU:=#HourTrig,
+                         R:=#Counter_Hour_Reset,
+                         PV:=24,
+                         Q=>#DayTrig,
+                         CV=>"Hours_ET");
+
+"IEC_Counter_0_DB_3".CTU(CU := #DayTrig,
+                         R := #Counter_Day_Reset,
+                         PV := 365,
+                         Q => #TenYearsTrig,
+                         CV => "Days_ET");
+
+// Hourmeter Reset
+IF "Hourmeter_Reset_PB" THEN
+    "IEC_Timer_0_DB_11".TON(IN := TRUE,
+                            PT := T#5s,
+                            Q => "Hourmeter_Reset_Trig",
+                            ET => "ResetTime");
+ELSE
+    RESET_TIMER("IEC_Timer_0_DB_11");
+    "Hourmeter_Reset_Trig" := 0;
+END_IF;
+
+IF "Hourmeter_Reset_Trig" OR #MinuteTrig THEN
+    #TimerReset := 1;
+ELSE
+    #TimerReset := 0;
+END_IF;
+
+IF "Hourmeter_Reset_Trig" OR #HourTrig THEN
+    #Counter_Min_Reset := 1;
+ELSE
+    #Counter_Min_Reset := 0;
+END_IF;
+
+IF "Hourmeter_Reset_Trig" OR #DayTrig THEN
+    #Counter_Hour_Reset := 1;
+ELSE
+    #Counter_Hour_Reset := 0;
+END_IF;
+
+IF "Hourmeter_Reset_Trig" OR #TenYearsTrig THEN
+    #Counter_Day_Reset := 1;
+ELSE
+    #Counter_Day_Reset := 0;
+END_IF;
+
+
+
+
