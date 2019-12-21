@@ -1,1 +1,71 @@
+//********
 
+// Hand-Off-Auto / Local-Off-Remote pushbuttons defined for some devices (Intake house gates servo motor,
+// Oil pump VFD, Alarm horn, Power station interlock, Turbine brake)
+
+//**********
+
+// Baffle or Intake house gates servo motor
+IF "Baffle_Off_PB" AND "Baffle_HOA" <> 0 THEN // P_Trig equivalent
+    "Baffle_HOA" := 0;
+    ELSIF "Baffle_Local_PB" AND "Baffle_HOA" <> 1 THEN
+           "Baffle_HOA" := 1;
+            ELSIF "Baffle_Remote_PB" AND "Baffle_HOA" <> 2 THEN
+                   "Baffle_HOA" := 2;
+END_IF;
+
+IF "Baffle_HOA" < 0 OR "Baffle_HOA" > 2 THEN
+    "Baffle_HOA" := 0;
+END_IF;
+
+// OilPumpVFD_En_Out
+IF "OilPumpVFD_Off_PB" AND "OilPumpVFD_HOA" <> 0 THEN
+    "OilPumpVFD_HOA" := 0;
+     ELSIF "OilPumpVFD_Local_PB" AND "OilPumpVFD_HOA" <> 1 THEN
+            "OilPumpVFD_HOA" := 1;
+             ELSIF "OilPumpVFD_Remote_PB" AND "OilPumpVFD_HOA" <> 2 THEN
+                    "OilPumpVFD_HOA" := 2;
+END_IF;
+
+IF "OilPumpVFD_HOA" < 0 OR "OilPumpVFD_HOA" > 2 THEN
+    "OilPumpVFD_HOA" := 0;
+END_IF;
+
+// AlarmHorn_En_Out
+IF "AlarmHorn_Off_PB" AND "AlarmHorn_HOA" <> 0 THEN
+    "AlarmHorn_HOA" := 0;
+     ELSIF "AlarmHorn_Local_PB" AND "AlarmHorn_HOA" <> 1 THEN
+            "AlarmHorn_HOA" := 1;
+             ELSIF "AlarmHorn_Remote_PB" AND "AlarmHorn_HOA" <> 2 THEN
+                    "AlarmHorn_HOA" := 2;
+END_IF;
+                
+IF "AlarmHorn_HOA" < 0 OR "AlarmHorn_HOA" > 2 THEN
+    "AlarmHorn_HOA" := 0;
+END_IF;
+
+// StationInterlock_En_Out
+IF "StationInterlock_Off_PB" AND "StationInterlock_HOA" <> 0 THEN
+    "StationInterlock_HOA" := 0;
+     ELSIF "StationInterlock_Local_PB" AND "StationInterlock_HOA" <> 1 THEN
+            "StationInterlock_HOA" := 1;
+             ELSIF "StationInterlock_Remote_PB" AND "StationInterlock_HOA" <> 2 THEN
+                    "StationInterlock_HOA" := 2;
+END_IF;
+
+IF "StationInterlock_HOA" < 0 OR "StationInterlock_HOA" > 2 THEN
+    "StationInterlock_HOA" := 0;
+END_IF;
+
+// Brake_En_Out
+IF "Brake_Off_PB" AND "Brake_HOA" <> 0 THEN
+    "Brake_HOA" := 0;
+     ELSIF "Brake_Local_PB" AND "Brake_HOA" <> 1 THEN
+            "Brake_HOA" := 1;
+             ELSIF "Brake_Remote_PB" AND "Brake_HOA" <> 2 THEN
+                    "Brake_HOA" := 2;
+END_IF;
+
+IF "Brake_HOA" < 0 OR "Brake_HOA" > 2 THEN
+    "Brake_HOA" := 0;
+END_IF;
