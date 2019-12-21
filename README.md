@@ -51,6 +51,11 @@ Once the Stop button has been pushed, power station interlock is opened, turbine
 #### Idle Mode
 Power station interlock and intake house servo motor are deenergized and the turbine brake is engaged. In addition, when an alarm is triggered, the sequence should be aborted and the system should go into Idle mode.
 
-
+## Other project details
+I have also added blocks of code for the following:
+ - Initializing the simulation (all the setpoints, delay time, push buttons are configured at the start)
+ - Hand-Off-Auto / Local-Off-Remote pushbuttons set up for the devices (Intake house gates servo motor, Oil pump VFD, Alarm horn, 
+   Power station interlock, Turbine brake)
+ - A hourmeter to keep track of power supplied to energy grid when system enters generation mode.
 
 
