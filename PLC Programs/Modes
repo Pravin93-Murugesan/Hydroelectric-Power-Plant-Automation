@@ -1,0 +1,168 @@
+//********
+
+// The different modes of the system is defined here.
+
+//**********
+
+IF "Alarm_EmerStop" OR "Alarm_BrakeFailure" THEN
+    "WarmupTransition" := 1;
+    "StabilizeTransition" := 1;
+    "GenTransition" := 1;
+    "CooldownTransition" := 1;
+ELSE
+    //"WarmupTransition" := 0;
+    //"StabilizeTransition" := 0;
+    //"GenTransition" := 0;
+    //"CooldownTransition" := 0;
+    
+    IF "StartSystem_PB" AND "IdleMode" AND "FullAutoBit" THEN
+        "StartSequence" := 1;
+    ELSE
+        "StartSequence" := 0;
+    END_IF;
+    
+    // Warmup Mode
+    IF "WarmupMode" THEN
+        
+        "Brake_Ctrl" := 0;
+        "Baffle_PID_Inp" := "RPM";
+        "Baffle_PID_SP" := "RPMWarmup_SP";
+        //"OilPumpVFDWarmup_PID_SP" := "OilPumpVFDWarmup_SP";
+        "OilPumpVFDWarmup_SP" := "OilPumpVFD_Pct";
+        
+        IF "OilTemp" > "OilTempWarmup_SP" THEN
+            
+            "TIME_CONV"(INP1 := "OilTempWarmup_DT",
+                        OUT => #int_out1,
+                        Time2 => #time_out1);
+            
+            "IEC_Timer_0_DB_7".TON(IN := TRUE,
+                                   PT := #time_out1,
+                                   Q => "WarmupTransition_Trig",
+                                   ET => "OilTempWarmup_ET");
+        ELSE
+            RESET_TIMER("IEC_Timer_0_DB_7");
+            "WarmupTransition_Trig" := 0;       // New Piece
+        END_IF;
+        
+        IF "WarmupTransition_Trig" THEN
+            RESET_TIMER("IEC_Timer_0_DB_7");
+            "WarmupTransition" := 1;
+        END_IF;
+        
+    ELSE
+        "WarmupTransition" := 0;
+    END_IF;
+    
+    IF "Alarm_RotorOverSpeed" OR "Alarm_OilTempHigh" THEN
+        "WarmupTransition" := 1;
+    END_IF;
+    
+    // Stabilize Mode
+    IF "StabilizeMode" THEN
+        
+        "Baffle_PID_Inp" := "Current";
+        "Baffle_PID_SP" := "CurrentStable_SP";
+        
+        #temp1 := "CurrentStable_SP" - 50;
+        #temp2 := "CurrentStable_SP" + 50;
+        
+        IF "Current" > #temp1 AND "Current" < #temp2 THEN
+            
+            "TIME_CONV"(INP1 := "StablePower_DT",
+                        OUT => #int_out2,
+                        Time2 => #time_out2);
+            
+            "IEC_Timer_0_DB_8".TON(IN := TRUE,
+                                   PT := #time_out2,
+                                   Q => "StabilizeTransition_Trig",
+                                   ET => "StablePower_ET");
+            
+        ELSE
+            RESET_TIMER("IEC_Timer_0_DB_8");
+            "StabilizeTransition_Trig" := 0;
+        END_IF;
+        
+        IF "StabilizeTransition_Trig" OR "Alarm_OilTempHigh" THEN
+            RESET_TIMER("IEC_Timer_0_DB_8");
+            "StabilizeTransition" := 1;
+        END_IF;
+        
+    ELSE
+        "StabilizeTransition" := 0;
+    END_IF;
+    
+    IF "Alarm_RotorOverSpeed" THEN
+        "StabilizeTransition" := 1;
+    END_IF;
+    
+    // Generation Mode
+    IF "GenerationMode" AND NOT "Alarm_OverCur" THEN
+        
+        "StationInterlock_Ctrl" := 1; // Tag
+        
+        IF "StopSystem_PB" THEN
+            "GenTransition" := 1;
+        END_IF;
+        
+    ELSE
+        "GenTransition" := 0;
+    END_IF;
+    
+    IF "Alarm_RotorOverSpeed" OR "Alarm_OilTempHigh" OR "Alarm_OverCur" THEN
+        "GenTransition" := 1;
+    END_IF;
+    
+    // Cooldown Mode
+    IF "CooldownMode" THEN
+        
+        "GridInterlock" := 0; // Check Tag
+        "Baffle_PID_Inp" := "RPM";
+        "Baffle_PID_SP" := "RPMCooldown_SP";
+        //"OilPumpVFDCooldown_PID_SP" := "OilPumpVFDCooldown_SP";
+        "OilPumpVFDCooldown_SP" := "OilPumpVFD_Pct"; // Check requirement
+        
+        IF "OilTemp" < "OilTempCooldown_SP" THEN
+            
+            "TIME_CONV"(INP1 := "OilTempCooldown_DT",
+                        OUT => #int_out3,
+                        Time2 => #time_out3);
+            
+            "IEC_Timer_0_DB_9".TON(IN := TRUE,
+                                   PT := #time_out3,
+                                   Q => "CooldownTransition_Trig",
+                                   ET => "OilTempCooldown_ET");
+            
+        ELSE
+            RESET_TIMER("IEC_Timer_0_DB_9");
+            "CooldownTransition_Trig" := 0;
+        END_IF;
+        
+        IF "CooldownTransition_Trig" THEN
+            RESET_TIMER("IEC_Timer_0_DB_9");
+            "CooldownTransition" := 1;
+        END_IF;
+        
+    ELSE
+        "CooldownTransition" := 0;
+    END_IF;
+    
+END_IF;
+
+// Idle Mode
+IF "IdleMode" THEN
+    
+    "StationInterlock_Ctrl" := 0; // Below tags
+    "OilPumpVFD_Ctrl" := 0;
+    "Brake_Ctrl" := 1;
+    "Baffle_Ctrl" := 0;
+END_IF;
+
+// Fault Mode
+IF "Alarm_EmerStop" OR "Alarm_BrakeFailure" OR "Alarm_OverCur" OR "Alarm_RotorOverSpeed"
+    OR "Alarm_OilTempHigh" OR "Alarm_OilFlowHigh" OR "Alarm_OilFlowLow" THEN
+    
+    "FaultMode" := 1;
+ELSE
+    "FaultMode" := 0;
+END_IF;
