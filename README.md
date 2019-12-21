@@ -62,4 +62,4 @@ I have also added blocks of code for the following:
 They are listed in a seperate folder called 'PLC Programs'. Code in a different language (Functional Block, GRAPH or Ladder Logic) can be found in the pdf file called 'Print - PLC (2)'.
 
 ## HMI details
-Can be found in a seperate folder called 'HMI/SCADA'. For more information, look into the pdf file called 'Print - HMI'.
+Can be found in a seperate folder called 'HMI'. For more information, look into the pdf file called 'Print - HMI'.
