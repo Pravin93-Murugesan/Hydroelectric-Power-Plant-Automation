@@ -6,7 +6,7 @@
   - Process Configuration and Control
   - Alarm Management
 
-**System Status** - Displays system mode, alarm indicator, high-level system controls (start and stop button) and a hourmeter.
+**System Status** - Displays system mode, alarm indicator, high-level system controls (start and stop button) and a hourmeter.  
 Note: System will not start until all devices are in AUTO control mode (green) and all alarms eliminated.
 
 **Process Overview** - show a graphical representation of the system with relevant process values at their points of collection, 
